@@ -12,7 +12,8 @@
   "include": [
     "scripts/**/*",
     "test/**/*",
+    "src/**/*",
     "hardhat.config.ts",
-    "typechain/**/*"
+    "typechain-types/**/*"
   ]
 }

@@ -1,4 +1,5 @@
 import { ethers, run } from 'hardhat'
+import prompt from 'prompt'
 
 async function main() {
   const [deployer] = await ethers.getSigners()
@@ -17,11 +18,32 @@ async function main() {
   } as { [chainId: number]: string }
   const chainName = chains[chainId]
 
-  const contractName = 'MyERC721'
-  const contractSymbol = 'MYERC721'
+  const { name, symbol, baseURI } = await prompt.get({
+    properties: {
+      name: {
+        required: true,
+        type: 'string',
+        message: 'Contract name',
+        default: 'BWLSeals',
+      },
+      symbol: {
+        required: true,
+        type: 'string',
+        message: 'Contract symbol',
+        default: 'BWLS',
+      },
+      baseURI: {
+        required: true,
+        type: 'string',
+        message: 'Contract base URI',
+      },
+    },
+  })
+
+  const contractName = 'BWLSeals'
   console.log(`Deploying ${contractName}...`)
-  const Contract = await ethers.getContractFactory(contractName)
-  const contract = await Contract.deploy(contractName, contractSymbol)
+  const Contract = await ethers.getContractFactory('BWLSeals')
+  const contract = await Contract.deploy(name, symbol, baseURI)
 
   console.log('Deploy tx gas price:', contract.deployTransaction.gasPrice)
   console.log('Deploy tx gas limit:', contract.deployTransaction.gasLimit)
@@ -37,7 +59,7 @@ async function main() {
   try {
     await run('verify:verify', {
       address,
-      constructorArguments: [contractName, contractSymbol],
+      constructorArguments: [name, symbol, baseURI],
     })
   } catch (err) {
     console.log(
