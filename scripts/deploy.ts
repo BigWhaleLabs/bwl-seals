@@ -1,4 +1,5 @@
 import { ethers, run } from 'hardhat'
+import { utils } from 'ethers'
 import prompt from 'prompt'
 
 async function main() {
@@ -6,7 +7,10 @@ async function main() {
 
   // Deploy the contract
   console.log('Deploying contracts with the account:', deployer.address)
-  console.log('Account balance:', (await deployer.getBalance()).toString())
+  console.log(
+    'Account balance:',
+    utils.formatEther(await deployer.getBalance())
+  )
 
   const provider = ethers.provider
   const { chainId } = await provider.getNetwork()
@@ -45,8 +49,14 @@ async function main() {
   const Contract = await ethers.getContractFactory('BWLSeals')
   const contract = await Contract.deploy(name, symbol, baseURI)
 
-  console.log('Deploy tx gas price:', contract.deployTransaction.gasPrice)
-  console.log('Deploy tx gas limit:', contract.deployTransaction.gasLimit)
+  console.log(
+    'Deploy tx gas price:',
+    utils.formatEther(contract.deployTransaction.gasPrice || 0)
+  )
+  console.log(
+    'Deploy tx gas limit:',
+    utils.formatEther(contract.deployTransaction.gasLimit)
+  )
   await contract.deployed()
   const address = contract.address
 
