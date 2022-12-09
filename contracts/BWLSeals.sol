@@ -87,13 +87,9 @@ contract BWLSeals is ERC721, Ownable {
     }
   }
 
-  function tokenURI(uint256 _tokenId)
-    public
-    view
-    virtual
-    override
-    returns (string memory)
-  {
+  function tokenURI(
+    uint256 _tokenId
+  ) public view virtual override returns (string memory) {
     return string(abi.encodePacked(baseTokenURI, "/", _tokenId.toString()));
   }
 
@@ -108,17 +104,15 @@ contract BWLSeals is ERC721, Ownable {
   function _beforeTokenTransfer(
     address _from,
     address _to,
-    uint256 _tokenId
+    uint256 _firstTokenId,
+    uint256 _batchSize
   ) internal override(ERC721) {
-    super._beforeTokenTransfer(_from, _to, _tokenId);
+    super._beforeTokenTransfer(_from, _to, _firstTokenId, _batchSize);
   }
 
-  function supportsInterface(bytes4 _interfaceId)
-    public
-    view
-    override(ERC721)
-    returns (bool)
-  {
+  function supportsInterface(
+    bytes4 _interfaceId
+  ) public view override(ERC721) returns (bool) {
     return super.supportsInterface(_interfaceId);
   }
 }
